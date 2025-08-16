@@ -1,6 +1,9 @@
 #pragma once
 
 #include "ll/api/mod/NativeMod.h"
+#include "plotx/Global.hpp"
+#include <filesystem>
+#include <string_view>
 
 namespace plotx {
 
@@ -16,11 +19,15 @@ public:
 
     bool disable();
 
-    bool unload();
-
     [[nodiscard]] ll::mod::NativeMod& getSelf() const;
 
+    PXNDAPI std::filesystem::path getConfigPath() const;
+    PXAPI void                    loadConfig() const;
+    PXAPI void                    saveConfig() const;
+
 private:
+    static constexpr std::string_view ConfigFileName = "config.json";
+
     ll::mod::NativeMod& mSelf;
 };
 
