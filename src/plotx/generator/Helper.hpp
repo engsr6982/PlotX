@@ -3,7 +3,7 @@
 #include "mc/world/level/block/Block.h"
 #include <array>
 
-
+#include "plotx/infra/Concepts.hpp"
 namespace plotx::generator {
 
 
@@ -26,13 +26,7 @@ using BufferIndex   = int;
 // 索引公式：(x * ChunkWidth + z) * WorldTotalHeight + y
 [[nodiscard]] inline BufferIndex getIndex(int x, int y, int z) { return (x * ChunkWidth + z) * WorldTotalHeight + y; }
 
-template <typename T>
-concept HasXYZ = requires(T const& t) {
-    { t.x } -> std::convertible_to<int>;
-    { t.y } -> std::convertible_to<int>;
-    { t.z } -> std::convertible_to<int>;
-};
-template <HasXYZ T>
+template <HasXYZ_v T>
 [[nodiscard]] inline BufferIndex getIndex(T const& t) {
     return getIndex(t.x, t.y, t.z);
 }
