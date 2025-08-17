@@ -11,6 +11,12 @@ class WorldPos {
 public:
     int x{}, y{}, z{};
 
+    WorldPos() = default;
+    PXAPI explicit WorldPos(int x, int y, int z);
+
+    template <HasXYZ_v T>
+    explicit WorldPos(T const& t) : WorldPos{t.x, t.y, t.z} {}
+
     PXNDAPI std::string toString() const;
 
     template <HasXYZ_v T>
@@ -24,12 +30,10 @@ public:
     }
 
     template <HasXYZ_v T>
-    static WorldPos from(T const& t) {
-        return WorldPos{t.x, t.y, t.z};
+    bool operator==(T const& other) const {
+        return x == other.x && y == other.y && z == other.z;
     }
 };
-
-STATIC_ASSERT_AGGREGATE(WorldPos);
 
 
 } // namespace plotx
