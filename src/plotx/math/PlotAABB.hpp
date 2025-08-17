@@ -1,6 +1,5 @@
 #pragma once
 #include "plotx/Global.hpp"
-#include "plotx/infra/Concepts.hpp"
 #include "plotx/math/WorldPos.hpp"
 #include <vector>
 
@@ -14,9 +13,6 @@ public:
 
     PlotAABB() = default;
     PXAPI explicit PlotAABB(WorldPos const& min, WorldPos const& max);
-
-    template <HasXYZ_v T>
-    explicit PlotAABB(T const& min, T const& max) : PlotAABB{min, max} {}
 
     PXNDAPI std::string toString() const;
 
