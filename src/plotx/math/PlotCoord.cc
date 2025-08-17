@@ -9,12 +9,13 @@
 
 namespace plotx {
 
-PlotCoord::PlotCoord(int x, int z) {
+PlotCoord::PlotCoord(int x, int z) : x(x), z(z) {
     auto const& cfg = gConfig_.generator;
 
     int total = cfg.plotWidth + cfg.roadWidth;
     min       = WorldPos{x * total, generator::WorldMinHeight, z * total};
     max       = WorldPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+    valid_    = true;
 }
 
 PlotCoord::PlotCoord(WorldPos const& pos) {
@@ -39,16 +40,15 @@ PlotCoord::PlotCoord(WorldPos const& pos) {
         x      = 0;
         z      = 0;
     } else {
-        min = WorldPos{x * total, generator::WorldMinHeight, z * total};
-        max = WorldPos{min.x + plotWidth - 1, generator::WorldMaxHeight, min.z + plotWidth - 1};
+        min    = WorldPos{x * total, generator::WorldMinHeight, z * total};
+        max    = WorldPos{min.x + plotWidth - 1, generator::WorldMaxHeight, min.z + plotWidth - 1};
+        valid_ = true;
     }
 }
 
-std::string PlotCoord::toString() const { return fmt::format("PlotPos({}, {})\n{}", x, z, PlotAABB::toString()); }
+std::string PlotCoord::toString() const { return fmt::format("PlotCoord({}, {})\n{}", x, z, PlotAABB::toString()); }
 
-bool PlotCoord::operator==(PlotCoord const& pos) const {
-    return pos.x == x && pos.z == z && pos.min == min && pos.max == max;
-}
+bool PlotCoord::operator==(PlotCoord const& pos) const { return pos.x == x && pos.z == z && PlotAABB::operator==(pos); }
 
 
 } // namespace plotx
