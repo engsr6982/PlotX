@@ -1,5 +1,4 @@
 #pragma once
-#include "WorldPos.hpp"
 #include "plotx/Global.hpp"
 #include "plotx/infra/Concepts.hpp"
 #include "plotx/math/PlotAABB.hpp"
@@ -14,10 +13,7 @@ public:
 
     PlotCoord() = default;
     PXAPI explicit PlotCoord(int x, int z);
-    PXAPI explicit PlotCoord(WorldPos const& pos);
-
-    template <HasXYZ_v T>
-    explicit PlotCoord(T const& pos) : PlotCoord{WorldPos{pos}} {}
+    PXAPI explicit PlotCoord(BlockPos const& pos);
 
     PXNDAPI std::string toString() const;
 

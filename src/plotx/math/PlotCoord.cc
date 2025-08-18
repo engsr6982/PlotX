@@ -3,7 +3,6 @@
 #include "plotx/generator/Helper.hpp"
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
-#include "plotx/math/WorldPos.hpp"
 #include <cmath>
 
 
@@ -13,12 +12,12 @@ PlotCoord::PlotCoord(int x, int z) : x(x), z(z) {
     auto const& cfg = gConfig_.generator;
 
     int total = cfg.plotWidth + cfg.roadWidth;
-    min       = WorldPos{x * total, generator::WorldMinHeight, z * total};
-    max       = WorldPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+    min       = BlockPos{x * total, generator::WorldMinHeight, z * total};
+    max       = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
     valid_    = true;
 }
 
-PlotCoord::PlotCoord(WorldPos const& pos) {
+PlotCoord::PlotCoord(BlockPos const& pos) {
     auto const& cfg       = gConfig_.generator;
     auto const& plotWidth = cfg.plotWidth;
     auto const& roadWidth = cfg.roadWidth;
@@ -40,8 +39,8 @@ PlotCoord::PlotCoord(WorldPos const& pos) {
         x      = 0;
         z      = 0;
     } else {
-        min    = WorldPos{x * total, generator::WorldMinHeight, z * total};
-        max    = WorldPos{min.x + plotWidth - 1, generator::WorldMaxHeight, min.z + plotWidth - 1};
+        min    = BlockPos{x * total, generator::WorldMinHeight, z * total};
+        max    = BlockPos{min.x + plotWidth - 1, generator::WorldMaxHeight, min.z + plotWidth - 1};
         valid_ = true;
     }
 }

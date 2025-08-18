@@ -2,7 +2,6 @@
 #include "plotx/generator/Helper.hpp"
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
-#include "plotx/math/WorldPos.hpp"
 #include <cmath>
 
 
@@ -15,12 +14,12 @@ PlotCross::PlotCross(int x, int z) : x(x), z(z) {
 
     int total = cfg.plotWidth + roadWidth;
 
-    min = WorldPos{
+    min = BlockPos{
         x * total + cfg.plotWidth,
         generator::WorldMinHeight,
         z * total + cfg.plotWidth,
     };
-    max = WorldPos{
+    max = BlockPos{
         min.x + roadWidth - 1,
         generator::WorldMaxHeight,
         min.z + roadWidth - 1,
@@ -28,7 +27,7 @@ PlotCross::PlotCross(int x, int z) : x(x), z(z) {
     valid_ = true;
 }
 
-PlotCross::PlotCross(WorldPos const& pos) {
+PlotCross::PlotCross(BlockPos const& pos) {
     auto const& cfg       = gConfig_.generator;
     int const&  roadWidth = cfg.roadWidth;
 
@@ -48,12 +47,12 @@ PlotCross::PlotCross(WorldPos const& pos) {
         return;
     }
 
-    min = WorldPos{
+    min = BlockPos{
         x * total + cfg.plotWidth,
         generator::WorldMinHeight,
         z * total + cfg.plotWidth,
     };
-    max = WorldPos{
+    max = BlockPos{
         min.x + roadWidth - 1,
         generator::WorldMaxHeight,
         min.z + roadWidth - 1,

@@ -1,9 +1,7 @@
 #pragma once
 #include "plotx/Global.hpp"
-#include "plotx/infra/Concepts.hpp"
 #include "plotx/math/PlotAABB.hpp"
 #include "plotx/math/WorldDirection.hpp"
-#include "plotx/math/WorldPos.hpp"
 
 
 namespace plotx {
@@ -17,11 +15,7 @@ public:
 
     PlotRoad() = default;
     PXAPI explicit PlotRoad(int x, int z, bool isTransverse);
-
-    PXAPI explicit PlotRoad(WorldPos const& pos);
-
-    template <HasXYZ_v T>
-    explicit PlotRoad(T const& pos) : PlotRoad(WorldPos{pos}) {}
+    PXAPI explicit PlotRoad(BlockPos const& pos);
 
     /**
      * @brief 是否横向

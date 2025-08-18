@@ -2,7 +2,6 @@
 #include "plotx/Global.hpp"
 #include "plotx/infra/Concepts.hpp"
 #include "plotx/math/PlotAABB.hpp"
-#include "plotx/math/WorldPos.hpp"
 
 
 namespace plotx {
@@ -18,10 +17,7 @@ public:
 
     PlotCross() = default;
     PXAPI explicit PlotCross(int x, int z);
-    PXAPI explicit PlotCross(WorldPos const& pos);
-
-    template <HasXYZ_v T>
-    explicit PlotCross(T const& pos) : PlotCross(WorldPos{pos}) {}
+    PXAPI explicit PlotCross(BlockPos const& pos);
 
     PXNDAPI std::string toString() const;
 

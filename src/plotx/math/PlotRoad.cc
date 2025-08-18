@@ -4,7 +4,6 @@
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
 #include "plotx/math/WorldDirection.hpp"
-#include "plotx/math/WorldPos.hpp"
 #include <cmath>
 
 
@@ -17,17 +16,17 @@ PlotRoad::PlotRoad(int x, int z, bool isTransverse) : x(x), z(z), isTransverse_(
     int total = cfg.plotWidth + cfg.roadWidth;
     if (isTransverse_) {
         // 横向面朝东方
-        min = WorldPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
-        max = WorldPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
+        max = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
     } else {
         // 纵向面朝南方
-        min = WorldPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
-        max = WorldPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
+        max = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
     }
     valid_ = true;
 }
 
-PlotRoad::PlotRoad(WorldPos const& pos) {
+PlotRoad::PlotRoad(BlockPos const& pos) {
     auto const& cfg = gConfig_.generator;
 
     int total = cfg.plotWidth + cfg.roadWidth;
@@ -42,13 +41,13 @@ PlotRoad::PlotRoad(WorldPos const& pos) {
 
     if (localX >= cfg.plotWidth && localX < total && localZ < cfg.plotWidth) {
         // 纵向道路
-        min = WorldPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
-        max = WorldPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
+        max = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
 
     } else if (localZ >= cfg.plotWidth && localZ < total && localX < cfg.plotWidth) {
         // 横向道路
-        min = WorldPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
-        max = WorldPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.roadWidth - 1};
+        min = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
+        max = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.roadWidth - 1};
 
     } else {
         // 不在道路上
