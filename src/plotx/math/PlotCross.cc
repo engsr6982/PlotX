@@ -63,6 +63,8 @@ PlotCross::PlotCross(BlockPos const& pos) {
 
 std::string PlotCross::toString() const { return fmt::format("PlotCross({},{})\n{}", x, z, PlotAABB::toString()); }
 
+bool PlotCross::isValid() const { return valid_; }
+
 bool PlotCross::operator==(PlotCross const& other) const {
     return other.x == x && other.z == z && PlotAABB::operator==(other);
 }

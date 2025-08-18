@@ -72,6 +72,8 @@ std::string PlotRoad::toString() const {
     return fmt::format("{}({}, {})\n{}", isTransverse_ ? EastStr : SouthStr, x, z, PlotAABB ::toString());
 }
 
+bool PlotRoad::isValid() const { return valid_; }
+
 bool PlotRoad::operator==(PlotRoad const& other) const {
     return x == other.x && z == other.z && isTransverse_ == other.isTransverse_ && PlotAABB::operator==(other);
 }

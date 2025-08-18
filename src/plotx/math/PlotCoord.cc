@@ -47,6 +47,8 @@ PlotCoord::PlotCoord(BlockPos const& pos) {
 
 std::string PlotCoord::toString() const { return fmt::format("PlotCoord({}, {})\n{}", x, z, PlotAABB::toString()); }
 
+bool PlotCoord::isValid() const { return valid_; }
+
 bool PlotCoord::operator==(PlotCoord const& pos) const { return pos.x == x && pos.z == z && PlotAABB::operator==(pos); }
 
 

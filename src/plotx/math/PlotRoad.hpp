@@ -33,6 +33,8 @@ public:
      */
     PXNDAPI WorldDirection getWorldDirection() const;
 
+    PXNDAPI bool isValid() const;
+
     PXNDAPI std::string toString() const;
 
     PXAPI bool operator==(PlotRoad const& other) const;

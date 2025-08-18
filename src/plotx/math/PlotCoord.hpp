@@ -17,6 +17,8 @@ public:
 
     PXNDAPI std::string toString() const;
 
+    PXNDAPI bool isValid() const;
+
     PXAPI bool operator==(PlotCoord const& pos) const;
 };
 
