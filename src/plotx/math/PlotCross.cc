@@ -33,12 +33,16 @@ PlotCross::PlotCross(BlockPos const& pos) {
 
     int total = cfg.plotWidth + roadWidth;
 
-    x = static_cast<int>(std::floor(pos.x / total));
-    z = static_cast<int>(std::floor(pos.z / total));
+    auto dx = static_cast<double>(pos.x);
+    auto dz = static_cast<double>(pos.z);
 
-    // 计算 min 和 max
-    int localX = (int)std::floor(pos.x) - (x * total);
-    int localZ = (int)std::floor(pos.z) - (z * total);
+    // 计算全局坐标在哪个大区域内
+    x = static_cast<int>(std::floor(dx / total));
+    z = static_cast<int>(std::floor(dz / total));
+
+    // 计算在大区域内的局部坐标
+    int localX = static_cast<int>(std::floor(dx)) - (x * total);
+    int localZ = static_cast<int>(std::floor(dz)) - (z * total);
 
     if (localX < cfg.plotWidth || localX > total - 1 || localZ < cfg.plotWidth || localZ > total - 1) {
         valid_ = false;
