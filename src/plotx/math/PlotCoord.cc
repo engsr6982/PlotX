@@ -24,13 +24,17 @@ PlotCoord::PlotCoord(BlockPos const& pos) {
 
     auto const total = cfg.plotWidth + roadWidth;
 
-    // 计算地皮全局坐标
-    x = static_cast<int>(std::floor(pos.x / total));
-    z = static_cast<int>(std::floor(pos.z / total));
+    // 转 double 处理负数
+    double dx = static_cast<double>(pos.x);
+    double dz = static_cast<double>(pos.z);
 
-    // 计算地皮范围
-    auto localX = static_cast<int>(std::floor(pos.x)) % total;
-    auto localZ = static_cast<int>(std::floor(pos.z)) % total;
+    // 计算地皮坐标
+    x = static_cast<int>(std::floor(dx / total));
+    z = static_cast<int>(std::floor(dz / total));
+
+    // 计算局部坐标
+    int localX = static_cast<int>(std::floor(dx)) % total;
+    int localZ = static_cast<int>(std::floor(dz)) % total;
     if (localX < 0) localX += total;
     if (localZ < 0) localZ += total;
 
