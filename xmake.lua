@@ -42,3 +42,7 @@ target("PlotX") -- Change this to your mod name.
     if has_config("overworld") then
         add_defines("PLOTX_OVERWORLD")
     end
+
+    if is_mode("debug") then
+        add_defines("PLOTX_DEBUG")
+    end

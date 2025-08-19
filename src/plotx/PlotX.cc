@@ -6,6 +6,8 @@
 #include "plotx/infra/Config.hpp"
 #include <filesystem>
 
+#include "plotx/core/PlotCommand.hpp"
+
 namespace plotx {
 
 PlotX::PlotX() : self_(*ll::mod::NativeMod::current()) {}
@@ -22,6 +24,8 @@ bool PlotX::load() {
 
 bool PlotX::enable() {
     plotEventDriven_ = std::make_unique<PlotEventDriven>();
+
+    PlotCommand::setup();
 
     return true;
 }
