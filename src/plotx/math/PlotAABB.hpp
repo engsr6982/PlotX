@@ -53,6 +53,12 @@ public:
      */
     PXAPI bool fillLayer(int y, Block const& block) const;
 
+    /**
+     * 获取平面矩形的顶点
+     * @param closure 是否闭合
+     */
+    PXNDAPI std::vector<BlockPos> getVertices(bool closure = true) const;
+
     PXAPI bool operator==(PlotAABB const& other) const;
 };
 

@@ -1,6 +1,7 @@
 #include "PlotAABB.hpp"
 #include "fmt/format.h"
 #include "ll/api/service/Bedrock.h"
+#include "mc/world/level/BlockPos.h"
 #include "mc/world/level/BlockSource.h"
 #include "mc/world/level/Level.h"
 #include "mc/world/level/dimension/Dimension.h"
@@ -91,6 +92,19 @@ bool PlotAABB::fillLayer(int y, Block const& block) const {
     });
 
     return true;
+}
+
+std::vector<BlockPos> PlotAABB::getVertices(bool closure) const {
+    std::vector<BlockPos> vertices = {
+        min, // 左下
+        {max.x, min.y, min.z}, // 右下
+        max, // 右上
+        {min.x, min.y, max.z}, // 左上
+    };
+    if (closure) {
+        vertices.push_back(min);
+    }
+    return vertices;
 }
 
 bool PlotAABB::operator==(PlotAABB const& other) const { return other.min == min && other.max == max; }
