@@ -6,6 +6,7 @@
 #include "mc/world/level/Level.h"
 #include "mc/world/level/dimension/Dimension.h"
 #include "plotx/PlotX.hpp"
+#include <cstddef>
 #include <vector>
 
 
@@ -46,36 +47,10 @@ std::vector<BlockPos> PlotAABB::getEdges(int y) const {
     return edges;
 }
 
-void PlotAABB::forEach(std::function<bool(BlockPos const&)> const& fn) const {
-    BlockPos curr = min;
-
-    auto& x = curr.x;
-    auto& y = curr.y;
-    auto& z = curr.z;
-    for (x = min.x; x <= max.x; x++) {
-        for (z = min.z; z <= max.z; z++) {
-            for (y = min.y; y <= max.y; y++) {
-                if (!fn(curr)) {
-                    return;
-                }
-            }
-        }
-    }
-}
+void PlotAABB::forEach(std::function<bool(BlockPos const&)> const& fn) const { implForEach(min, max, fn); }
 
 void PlotAABB::forEachLayer(int y, std::function<bool(BlockPos const&)> const& fn) const {
-    BlockPos curr = min;
-    curr.y        = y;
-
-    auto& x = curr.x;
-    auto& z = curr.z;
-    for (x = min.x; x <= max.x; x++) {
-        for (z = min.z; z <= max.z; z++) {
-            if (!fn(curr)) {
-                return;
-            }
-        }
-    }
+    implForEachLayer(min, max, y, fn);
 }
 
 bool PlotAABB::fillLayer(int y, Block const& block) const {
@@ -107,6 +82,89 @@ std::vector<BlockPos> PlotAABB::getVertices(bool closure) const {
     return vertices;
 }
 
+void PlotAABB::forEachEdge(std::function<bool(BlockPos const&)> const& fn) const {
+    auto vertices = getVertices();
+
+    size_t   next = 0;
+    BlockPos p1, p2;
+    for (auto const& v : vertices) {
+        next++;
+        if (next == vertices.size()) {
+            next = 0;
+        }
+
+        p1 = v;
+        p2 = vertices[next];
+
+        implForEach(p1, p2, fn);
+    }
+}
+
+void PlotAABB::forEachEdgeLayer(int y, std::function<bool(BlockPos const&)> const& fn) const {
+    for (auto& edge : getEdges(y)) {
+        if (!fn(edge)) {
+            return;
+        }
+    }
+}
+
+bool PlotAABB::fillEdgeLayer(int y, Block const& block) const {
+    auto dim = ll::service::getLevel()->getDimension(PlotX::getDimensionId()).lock();
+    if (!dim) {
+        return false;
+    }
+
+    auto& bs = dim->getBlockSourceFromMainChunkSource();
+
+    forEachEdgeLayer(y, [&](BlockPos const& pos) {
+        bs.setBlock(pos, block, 3, nullptr, nullptr);
+        return true;
+    });
+
+    return true;
+}
+
+
 bool PlotAABB::operator==(PlotAABB const& other) const { return other.min == min && other.max == max; }
+
+
+// impl
+void PlotAABB::implForEach(BlockPos const& min, BlockPos const& max, std::function<bool(BlockPos const&)> const& fn) {
+    BlockPos curr = min;
+
+    auto& x = curr.x;
+    auto& y = curr.y;
+    auto& z = curr.z;
+    for (x = min.x; x <= max.x; x++) {
+        for (z = min.z; z <= max.z; z++) {
+            for (y = min.y; y <= max.y; y++) {
+                if (!fn(curr)) {
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void PlotAABB::implForEachLayer(
+    BlockPos const&                             min,
+    BlockPos const&                             max,
+    int                                         y,
+    std::function<bool(BlockPos const&)> const& fn
+) {
+    BlockPos curr = min;
+    curr.y        = y;
+
+    auto& x = curr.x;
+    auto& z = curr.z;
+    for (x = min.x; x <= max.x; x++) {
+        for (z = min.z; z <= max.z; z++) {
+            if (!fn(curr)) {
+                return;
+            }
+        }
+    }
+}
+
 
 } // namespace plotx
