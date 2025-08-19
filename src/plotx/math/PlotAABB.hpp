@@ -1,9 +1,11 @@
 #pragma once
 #include "mc/world/level/BlockPos.h"
 #include "plotx/Global.hpp"
+#include <functional>
 #include <vector>
 
 
+class Block;
 namespace plotx {
 
 
@@ -41,6 +43,15 @@ public:
      *     └───────────────→ x
      */
     PXNDAPI std::vector<BlockPos> getEdges(int y) const;
+
+    PXAPI void forEach(std::function<bool(BlockPos const&)> const& fn) const;
+
+    PXAPI void forEachLayer(int y, std::function<bool(BlockPos const&)> const& fn) const;
+
+    /**
+     * 填充AABB的某一层
+     */
+    PXAPI bool fillLayer(int y, Block const& block) const;
 
     PXAPI bool operator==(PlotAABB const& other) const;
 };

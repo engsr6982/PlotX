@@ -1,5 +1,10 @@
 #include "PlotAABB.hpp"
 #include "fmt/format.h"
+#include "ll/api/service/Bedrock.h"
+#include "mc/world/level/BlockSource.h"
+#include "mc/world/level/Level.h"
+#include "mc/world/level/dimension/Dimension.h"
+#include "plotx/PlotX.hpp"
 #include <vector>
 
 
@@ -38,6 +43,54 @@ std::vector<BlockPos> PlotAABB::getEdges(int y) const {
         edges.emplace_back(max.x, y, z);
     }
     return edges;
+}
+
+void PlotAABB::forEach(std::function<bool(BlockPos const&)> const& fn) const {
+    BlockPos curr = min;
+
+    auto& x = curr.x;
+    auto& y = curr.y;
+    auto& z = curr.z;
+    for (x = min.x; x <= max.x; x++) {
+        for (z = min.z; z <= max.z; z++) {
+            for (y = min.y; y <= max.y; y++) {
+                if (!fn(curr)) {
+                    return;
+                }
+            }
+        }
+    }
+}
+
+void PlotAABB::forEachLayer(int y, std::function<bool(BlockPos const&)> const& fn) const {
+    BlockPos curr = min;
+    curr.y        = y;
+
+    auto& x = curr.x;
+    auto& z = curr.z;
+    for (x = min.x; x <= max.x; x++) {
+        for (z = min.z; z <= max.z; z++) {
+            if (!fn(curr)) {
+                return;
+            }
+        }
+    }
+}
+
+bool PlotAABB::fillLayer(int y, Block const& block) const {
+    auto dim = ll::service::getLevel()->getDimension(PlotX::getDimensionId()).lock();
+    if (!dim) {
+        return false;
+    }
+
+    auto& bs = dim->getBlockSourceFromMainChunkSource();
+
+    forEachLayer(y, [&](BlockPos const& pos) {
+        bs.setBlock(pos, block, 3, nullptr, nullptr);
+        return true;
+    });
+
+    return true;
 }
 
 bool PlotAABB::operator==(PlotAABB const& other) const { return other.min == min && other.max == max; }
