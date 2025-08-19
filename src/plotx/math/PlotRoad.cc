@@ -16,12 +16,14 @@ PlotRoad::PlotRoad(int x, int z, bool isTransverse) : x(x), z(z), isTransverse_(
     int total = cfg.plotWidth + cfg.roadWidth;
     if (isTransverse_) {
         // 横向面朝东方
-        min = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
-        max = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min           = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
+        max           = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        isTransverse_ = false;
     } else {
         // 纵向面朝南方
-        min = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
-        max = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min           = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
+        max           = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        isTransverse_ = true;
     }
     valid_ = true;
 }
@@ -31,23 +33,30 @@ PlotRoad::PlotRoad(BlockPos const& pos) {
 
     int total = cfg.plotWidth + cfg.roadWidth;
 
-    x = static_cast<int>(std::floor(pos.x / total));
-    z = static_cast<int>(std::floor(pos.z / total));
+    auto dx = static_cast<double>(pos.x);
+    auto dz = static_cast<double>(pos.z);
 
-    double localX = std::fmod(pos.x, total);
-    double localZ = std::fmod(pos.z, total);
+    x = static_cast<int>(std::floor(dx / total));
+    z = static_cast<int>(std::floor(dz / total));
+
+    double localX = std::fmod(dx, total);
+    double localZ = std::fmod(dz, total);
     if (localX < 0) localX += total;
     if (localZ < 0) localZ += total;
 
     if (localX >= cfg.plotWidth && localX < total && localZ < cfg.plotWidth) {
         // 纵向道路
-        min = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
-        max = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        min           = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
+        max           = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
+        isTransverse_ = false;
+        valid_        = true;
 
     } else if (localZ >= cfg.plotWidth && localZ < total && localX < cfg.plotWidth) {
         // 横向道路
-        min = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
-        max = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.roadWidth - 1};
+        min           = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
+        max           = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.roadWidth - 1};
+        isTransverse_ = true;
+        valid_        = true;
 
     } else {
         // 不在道路上
