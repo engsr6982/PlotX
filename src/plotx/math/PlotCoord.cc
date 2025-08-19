@@ -1,5 +1,7 @@
 #include "PlotCoord.hpp"
 #include "fmt/format.h"
+#include "mc/world/level/BlockPos.h"
+#include "mc/world/level/block/registry/BlockTypeRegistry.h"
 #include "plotx/generator/Helper.hpp"
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
@@ -52,6 +54,25 @@ PlotCoord::PlotCoord(BlockPos const& pos) {
 std::string PlotCoord::toString() const { return fmt::format("PlotCoord({}, {})\n{}", x, z, PlotAABB::toString()); }
 
 bool PlotCoord::isValid() const { return valid_; }
+
+void PlotCoord::tryFixBorder() const {
+    if (!valid_) {
+        return;
+    }
+
+    auto& borderBlock = BlockTypeRegistry::getDefaultBlockState(gConfig_.generator.borderBlock.c_str());
+
+    fillEdgeLayer(gConfig_.generator.generatorHeight + 1, borderBlock);
+}
+
+void PlotCoord::removeBorder() const {
+    if (!valid_) {
+        return;
+    }
+
+    auto& air = BlockTypeRegistry::getDefaultBlockState("minecraft:air");
+    fillEdgeLayer(gConfig_.generator.generatorHeight + 1, air);
+}
 
 bool PlotCoord::operator==(PlotCoord const& pos) const { return pos.x == x && pos.z == z && PlotAABB::operator==(pos); }
 

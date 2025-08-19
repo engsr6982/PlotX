@@ -1,6 +1,5 @@
 #pragma once
 #include "plotx/Global.hpp"
-#include "plotx/infra/Concepts.hpp"
 #include "plotx/math/PlotAABB.hpp"
 
 namespace plotx {
@@ -18,6 +17,16 @@ public:
     PXNDAPI std::string toString() const;
 
     PXNDAPI bool isValid() const;
+
+    /**
+     * 尝试修正边框(修复边框方块缺失)
+     */
+    PXAPI void tryFixBorder() const;
+
+    /**
+     * 删除边框
+     */
+    PXAPI void removeBorder() const;
 
     PXAPI bool operator==(PlotCoord const& pos) const;
 };
