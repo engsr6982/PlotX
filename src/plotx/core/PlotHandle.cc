@@ -1,7 +1,10 @@
 #include "PlotHandle.hpp"
 #include "mc/platform/UUID.h"
+#include "nlohmann/json.hpp"
+#include "nlohmann/json_fwd.hpp"
 #include "plotx/data/StorageStructure.hpp"
 #include "plotx/infra/DirtyCounter.hpp"
+#include "plotx/infra/Reflection.hpp"
 #include "plotx/math/PlotCoord.hpp"
 #include <algorithm>
 #include <string>
@@ -37,6 +40,8 @@ PlotHandle::PlotHandle(PlotRecord record)
 }
 
 PlotHandle::~PlotHandle() = default;
+
+DirtyCounter& PlotHandle::getDirtyCounter() { return dirty_; }
 
 DirtyCounter const& PlotHandle::getDirtyCounter() const { return dirty_; }
 
@@ -145,5 +150,14 @@ void PlotHandle::removeComment(CommentID id) {
 
 bool PlotHandle::isMergedMultiPlot() const { return record_.isMerged_; }
 
+
+// helper
+nlohmann::json PlotHandle::dump() const { return reflection::struct2json(record_); }
+
+std::shared_ptr<PlotHandle> PlotHandle::load(nlohmann::json& json) {
+    auto record = PlotRecord{};
+    reflection::json2structVersionPatch(json, record);
+    return PlotHandle::make(std::move(record));
+}
 
 } // namespace plotx

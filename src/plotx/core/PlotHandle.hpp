@@ -1,5 +1,6 @@
 #pragma once
 #include "mc/platform/UUID.h"
+#include "nlohmann/json_fwd.hpp"
 #include "plotx/Global.hpp"
 #include "plotx/data/StorageStructure.hpp"
 #include "plotx/infra/DirtyCounter.hpp"
@@ -39,6 +40,8 @@ public:
     static std::shared_ptr<PlotHandle> make(Args&&... args) {
         return std::make_shared<PlotHandle>(std::forward<Args>(args)...);
     }
+
+    PXAPI DirtyCounter& getDirtyCounter();
 
     PXAPI DirtyCounter const& getDirtyCounter() const;
 
@@ -81,6 +84,11 @@ public:
     PXNDAPI bool isMergedMultiPlot() const; // 是否为合并多块地皮
 
     PXNDAPI int getMergeCounter() const; // 合并地皮次数
+
+    // helper
+    PXNDAPI nlohmann::json dump() const;
+
+    PXNDAPI static std::shared_ptr<PlotHandle> load(nlohmann::json& json);
 };
 
 
