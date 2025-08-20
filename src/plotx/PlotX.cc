@@ -35,6 +35,8 @@ bool PlotX::load() {
 
     registry_ = std::make_unique<PlotRegistry>(*this);
 
+    engineManager_ = std::make_unique<script::EngineManager>();
+
     return true;
 }
 
@@ -47,6 +49,8 @@ bool PlotX::enable() {
 }
 
 bool PlotX::disable() {
+    engineManager_.reset();
+
     plotEventDriven_.reset();
     registry_.reset();
 
