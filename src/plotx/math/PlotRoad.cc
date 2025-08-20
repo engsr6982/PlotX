@@ -100,13 +100,6 @@ void PlotRoad::removeNeighbourBorder() const {
     auto& v2       = vertices[2]; // 右上 max
     auto& v3       = vertices[3]; // 右下
 
-    std::cout << "(RAW)removeNeighbourBorder: " << std::endl //
-              << " [0] : " << v0.toString() << std::endl     //
-              << " [1] : " << v1.toString() << std::endl     //
-              << " [2] : " << v2.toString() << std::endl     //
-              << " [3] : " << v3.toString() << std::endl
-              << std::endl;
-
     auto handle = [&](BlockPos const& pos) {
         bs.setBlock(pos, air, 3, nullptr, nullptr);
         return true;
@@ -130,12 +123,6 @@ void PlotRoad::removeNeighbourBorder() const {
         implForEachLayer(v0, v1, borderHeight, handle);
         implForEachLayer(v3, v2, borderHeight, handle);
     }
-    std::cout << "(PATCHED)removeNeighbourBorder: " << std::endl //
-              << " [0] : " << v0.toString() << std::endl         //
-              << " [1] : " << v1.toString() << std::endl         //
-              << " [2] : " << v2.toString() << std::endl         //
-              << " [3] : " << v3.toString() << std::endl
-              << std::endl;
 }
 
 bool PlotRoad::operator==(PlotRoad const& other) const {
