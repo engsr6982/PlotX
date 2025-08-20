@@ -1,6 +1,8 @@
 #pragma once
 #include "ll/api/reflection/Deserialization.h"
+#include "ll/api/reflection/Reflection.h"
 #include "ll/api/reflection/Serialization.h"
+#include "nlohmann/json.hpp"
 #include "nlohmann/json_fwd.hpp"
 #include <type_traits>
 
@@ -8,21 +10,18 @@
 namespace plotx::reflection {
 
 
-template <typename T, typename J = nlohmann::ordered_json>
-    requires std::is_aggregate_v<T>
-[[nodiscard]] inline J struct2json(T const& t) {
-    return ll::reflection::serialize<J>(t);
+template <class T>
+[[nodiscard]] inline decltype(auto) struct2json(T& t) {
+    return ll::reflection::serialize<nlohmann::ordered_json>(t).value();
 }
 
-template <typename T, typename J = nlohmann::ordered_json>
-    requires std::is_aggregate_v<T>
-inline void json2struct(T& t, J const& j) {
+template <class T, class J = nlohmann::ordered_json>
+inline void json2struct(T& t, J& j) {
     ll::reflection::deserialize(t, j).value();
 }
 
-template <typename T, typename J = nlohmann::ordered_json>
-    requires std::is_aggregate_v<T>
-inline void json2structDiffPatch(T& t, J const& j) {
+template <class T, class J = nlohmann::ordered_json>
+inline void json2structDiffPatch(T& t, J& j) {
     auto diff = struct2json(t);
     diff.merge_patch(j);
     json2struct(t, j);
