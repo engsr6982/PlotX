@@ -72,9 +72,9 @@ bool PlotAABB::fillLayer(int y, Block const& block) const {
 std::vector<BlockPos> PlotAABB::getVertices(bool closure) const {
     std::vector<BlockPos> vertices = {
         min, // 左下
-        {max.x, min.y, min.z}, // 右下
+        {max.x, min.y, min.z}, // 左上
         max, // 右上
-        {min.x, min.y, max.z}, // 左上
+        {min.x, max.y, max.z}, // 右下
     };
     if (closure) {
         vertices.push_back(min);

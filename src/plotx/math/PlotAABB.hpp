@@ -45,6 +45,12 @@ public:
     PXNDAPI std::vector<BlockPos> getEdges(int y) const;
 
     /**
+     * 获取平面矩形的顶点
+     * @param closure 是否闭合
+     */
+    PXNDAPI std::vector<BlockPos> getVertices(bool closure = true) const;
+
+    /**
      * 遍历AABB内的所有方块
      */
     PXAPI void forEach(std::function<bool(BlockPos const&)> const& fn) const;
@@ -53,17 +59,6 @@ public:
      * 遍历AABB的某一层
      */
     PXAPI void forEachLayer(int y, std::function<bool(BlockPos const&)> const& fn) const;
-
-    /**
-     * 填充AABB的某一层
-     */
-    PXAPI bool fillLayer(int y, Block const& block) const;
-
-    /**
-     * 获取平面矩形的顶点
-     * @param closure 是否闭合
-     */
-    PXNDAPI std::vector<BlockPos> getVertices(bool closure = true) const;
 
     /**
      * 遍历 AABB 的边 (平面顶点遍历)
@@ -76,6 +71,11 @@ public:
     PXAPI void forEachEdgeLayer(int y, std::function<bool(BlockPos const&)> const& fn) const;
 
     /**
+     * 填充AABB的某一层
+     */
+    PXAPI bool fillLayer(int y, Block const& block) const;
+
+    /**
      * 填充指定层的边
      */
     PXAPI bool fillEdgeLayer(int y, Block const& block) const;
@@ -83,7 +83,7 @@ public:
     PXAPI bool operator==(PlotAABB const& other) const;
 
 
-private:
+protected:
     static void implForEach(BlockPos const& min, BlockPos const& max, std::function<bool(BlockPos const&)> const& fn);
 
     static void

@@ -1,7 +1,6 @@
 #pragma once
 #include "plotx/Global.hpp"
 #include "plotx/math/PlotAABB.hpp"
-#include "plotx/math/WorldDirection.hpp"
 
 
 namespace plotx {
@@ -27,15 +26,14 @@ public:
      */
     PXNDAPI bool isLongitudinal() const;
 
-    /**
-     * @brief 获取世界方向
-     * @note 以面朝东方为准，看到的横向道路为 East, 纵向为 South
-     */
-    PXNDAPI WorldDirection getWorldDirection() const;
-
     PXNDAPI bool isValid() const;
 
     PXNDAPI std::string toString() const;
+
+    /**
+     * 移除道路相邻两边地皮的边框
+     */
+    PXAPI void removeNeighbourBorder() const;
 
     PXAPI bool operator==(PlotRoad const& other) const;
 };

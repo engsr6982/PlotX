@@ -32,7 +32,7 @@ void PlotCommand::setup() {
 
 // Impl
 void InstallDebugSubCommands(ll::command::CommandHandle& handle) {
-    handle.overload().text("debug").text("fill").execute([](CommandOrigin const& origin, CommandOutput& output) {
+    handle.overload().text("dbg").text("fill").execute([](CommandOrigin const& origin, CommandOutput& output) {
         if (origin.getOriginType() != CommandOriginType::Player) {
             output.error("This command can only be run by a player");
             return;
@@ -58,6 +58,57 @@ void InstallDebugSubCommands(ll::command::CommandHandle& handle) {
             output.error("Not in a plot");
         }
     });
+
+    handle.overload().text("dbg").text("removeBorder").execute([](CommandOrigin const& origin, CommandOutput& output) {
+        if (origin.getOriginType() != CommandOriginType::Player) {
+            output.error("This command can only be run by a player");
+            return;
+        }
+        auto& player = *static_cast<Player*>(origin.getEntity());
+        auto& pos    = player.getPosition();
+
+        auto coord = PlotCoord{pos};
+        if (!coord.isValid()) {
+            output.error("Not in a plot");
+            return;
+        }
+        coord.removeBorder();
+    });
+
+    handle.overload().text("dbg").text("tryFixBorder").execute([](CommandOrigin const& origin, CommandOutput& output) {
+        if (origin.getOriginType() != CommandOriginType::Player) {
+            output.error("This command can only be run by a player");
+            return;
+        }
+        auto& player = *static_cast<Player*>(origin.getEntity());
+        auto& pos    = player.getPosition();
+
+        auto coord = PlotCoord{pos};
+        if (!coord.isValid()) {
+            output.error("Not in a plot");
+            return;
+        }
+        coord.tryFixBorder();
+    });
+
+    handle.overload()
+        .text("dbg")
+        .text("removeNeighbourBorder")
+        .execute([](CommandOrigin const& origin, CommandOutput& output) {
+            if (origin.getOriginType() != CommandOriginType::Player) {
+                output.error("This command can only be run by a player");
+                return;
+            }
+            auto& player = *static_cast<Player*>(origin.getEntity());
+            auto& pos    = player.getPosition();
+
+            auto road = PlotRoad{pos};
+            if (!road.isValid()) {
+                output.error("Not in a road");
+                return;
+            }
+            road.removeNeighbourBorder();
+        });
 }
 
 

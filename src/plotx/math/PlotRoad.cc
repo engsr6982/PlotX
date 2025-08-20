@@ -1,9 +1,15 @@
 #include "PlotRoad.hpp"
 #include "fmt/color.h"
+#include "ll/api/service/Bedrock.h"
+#include "mc/world/level/BlockPos.h"
+#include "mc/world/level/BlockSource.h"
+#include "mc/world/level/Level.h"
+#include "mc/world/level/block/registry/BlockTypeRegistry.h"
+#include "mc/world/level/dimension/Dimension.h"
+#include "plotx/PlotX.hpp"
 #include "plotx/generator/Helper.hpp"
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
-#include "plotx/math/WorldDirection.hpp"
 #include <cmath>
 
 
@@ -15,15 +21,15 @@ PlotRoad::PlotRoad(int x, int z, bool isTransverse) : x(x), z(z), isTransverse_(
 
     int total = cfg.plotWidth + cfg.roadWidth;
     if (isTransverse_) {
-        // 横向面朝东方
+        // 横向道路
         min           = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
         max           = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
-        isTransverse_ = false;
+        isTransverse_ = true;
     } else {
-        // 纵向面朝南方
+        // 纵向道路
         min           = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
         max           = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
-        isTransverse_ = true;
+        isTransverse_ = false;
     }
     valid_ = true;
 }
@@ -45,17 +51,17 @@ PlotRoad::PlotRoad(BlockPos const& pos) {
     if (localZ < 0) localZ += total;
 
     if (localX >= cfg.plotWidth && localX < total && localZ < cfg.plotWidth) {
-        // 纵向道路
+        // 横向道路
         min           = BlockPos{x * total + cfg.plotWidth, generator::WorldMinHeight, z * total};
         max           = BlockPos{min.x + cfg.roadWidth - 1, generator::WorldMaxHeight, min.z + cfg.plotWidth - 1};
-        isTransverse_ = false;
+        isTransverse_ = true;
         valid_        = true;
 
     } else if (localZ >= cfg.plotWidth && localZ < total && localX < cfg.plotWidth) {
-        // 横向道路
+        // 纵向道路
         min           = BlockPos{x * total, generator::WorldMinHeight, z * total + cfg.plotWidth};
         max           = BlockPos{min.x + cfg.plotWidth - 1, generator::WorldMaxHeight, min.z + cfg.roadWidth - 1};
-        isTransverse_ = true;
+        isTransverse_ = false;
         valid_        = true;
 
     } else {
@@ -71,17 +77,66 @@ bool PlotRoad::isTransverse() const { return isTransverse_; }
 
 bool PlotRoad::isLongitudinal() const { return !isTransverse_; }
 
-WorldDirection PlotRoad::getWorldDirection() const {
-    return isTransverse_ ? WorldDirection::East : WorldDirection::South;
-}
-
 std::string PlotRoad::toString() const {
-    static constexpr auto EastStr  = "East";
-    static constexpr auto SouthStr = "South";
-    return fmt::format("{}({}, {})\n{}", isTransverse_ ? EastStr : SouthStr, x, z, PlotAABB ::toString());
+    return fmt::format("{}({}, {})\n{}", isTransverse_ ? "横向" : "纵向", x, z, PlotAABB ::toString());
 }
 
 bool PlotRoad::isValid() const { return valid_; }
+
+void PlotRoad::removeNeighbourBorder() const {
+    auto dim = ll::service::getLevel()->getDimension(PlotX::getDimensionId()).lock();
+    if (!dim) {
+        return;
+    }
+    auto& bs = dim->getBlockSourceFromMainChunkSource();
+
+    auto const& air = BlockTypeRegistry::getDefaultBlockState("minecraft:air");
+
+    int const borderHeight = gConfig_.generator.generatorHeight + 1;
+
+    auto  vertices = getVertices(false);
+    auto& v0       = vertices[0]; // 左下 min
+    auto& v1       = vertices[1]; // 左上
+    auto& v2       = vertices[2]; // 右上 max
+    auto& v3       = vertices[3]; // 右下
+
+    std::cout << "(RAW)removeNeighbourBorder: " << std::endl //
+              << " [0] : " << v0.toString() << std::endl     //
+              << " [1] : " << v1.toString() << std::endl     //
+              << " [2] : " << v2.toString() << std::endl     //
+              << " [3] : " << v3.toString() << std::endl
+              << std::endl;
+
+    auto handle = [&](BlockPos const& pos) {
+        bs.setBlock(pos, air, 3, nullptr, nullptr);
+        return true;
+    };
+
+    if (isTransverse_) {
+        // 横向
+        v0.x--;
+        v1.x++;
+        v2.x++;
+        v3.x--;
+        implForEachLayer(v0, v3, borderHeight, handle);
+        implForEachLayer(v1, v2, borderHeight, handle);
+
+    } else {
+        // 纵向
+        v0.z--;
+        v1.z--;
+        v2.z++;
+        v3.z++;
+        implForEachLayer(v0, v1, borderHeight, handle);
+        implForEachLayer(v3, v2, borderHeight, handle);
+    }
+    std::cout << "(PATCHED)removeNeighbourBorder: " << std::endl //
+              << " [0] : " << v0.toString() << std::endl         //
+              << " [1] : " << v1.toString() << std::endl         //
+              << " [2] : " << v2.toString() << std::endl         //
+              << " [3] : " << v3.toString() << std::endl
+              << std::endl;
+}
 
 bool PlotRoad::operator==(PlotRoad const& other) const {
     return x == other.x && z == other.z && isTransverse_ == other.isTransverse_ && PlotAABB::operator==(other);
