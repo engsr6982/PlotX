@@ -1,7 +1,12 @@
 #include "PlotCoord.hpp"
 #include "fmt/format.h"
+#include "ll/api/service/Bedrock.h"
 #include "mc/world/level/BlockPos.h"
+#include "mc/world/level/BlockSource.h"
+#include "mc/world/level/Level.h"
 #include "mc/world/level/block/registry/BlockTypeRegistry.h"
+#include "mc/world/level/dimension/Dimension.h"
+#include "plotx/PlotX.hpp"
 #include "plotx/generator/Helper.hpp"
 #include "plotx/infra/Config.hpp"
 #include "plotx/math/PlotAABB.hpp"
@@ -72,6 +77,27 @@ void PlotCoord::removeBorder() const {
 
     auto& air = BlockTypeRegistry::getDefaultBlockState("minecraft:air");
     fillEdgeLayer(gConfig_.generator.generatorHeight + 1, air);
+}
+
+void PlotCoord::removeBorderCorners() const {
+    if (!valid_) {
+        return;
+    }
+
+    auto dim = ll::service::getLevel()->getDimension(PlotX::getDimensionId()).lock();
+    if (!dim) {
+        return;
+    }
+    auto& bs = dim->getBlockSourceFromMainChunkSource();
+
+    auto const& air = BlockTypeRegistry::getDefaultBlockState("minecraft:air");
+
+    int const borderHeight = gConfig_.generator.generatorHeight + 1;
+
+    for (auto& v : getVertices(false)) {
+        v.y = borderHeight;
+        bs.setBlock(v, air, 3, nullptr, nullptr);
+    }
 }
 
 bool PlotCoord::operator==(PlotCoord const& pos) const { return pos.x == x && pos.z == z && PlotAABB::operator==(pos); }

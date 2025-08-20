@@ -28,6 +28,11 @@ public:
      */
     PXAPI void removeBorder() const;
 
+    /**
+     * 移除地皮边框的4个角
+     */
+    PXAPI void removeBorderCorners() const;
+
     PXAPI bool operator==(PlotCoord const& pos) const;
 };
 
