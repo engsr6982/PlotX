@@ -11,6 +11,7 @@
 #include <memory>
 
 #include "plotx/core/PlotCommand.hpp"
+#include "plotx/script/InternalEngine.hpp"
 
 namespace plotx {
 
@@ -26,16 +27,20 @@ bool PlotX::load() {
     logger.setLevel(ll::io::LogLevel::Trace);
 #endif
 
+    logger.trace("Try to load i18n");
     if (auto i18n = ll::i18n::getInstance().load(getSelf().getLangDir()); !i18n) {
         logger.error("Failed to load i18n: ");
         i18n.error().log(logger);
     }
 
+    logger.trace("Try to load config");
     loadConfig();
 
+    logger.trace("Initialize PlotRegistry");
     registry_ = std::make_unique<PlotRegistry>(*this);
 
-    engineManager_ = std::make_unique<script::EngineManager>();
+    logger.trace("Initialize InternalEngine");
+    engine_ = std::make_unique<script::InternalEngine>(*this);
 
     return true;
 }
@@ -49,7 +54,7 @@ bool PlotX::enable() {
 }
 
 bool PlotX::disable() {
-    engineManager_.reset();
+    engine_.reset();
 
     plotEventDriven_.reset();
     registry_.reset();

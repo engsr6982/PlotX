@@ -1,0 +1,32 @@
+{
+    // 纯 QuickJs ES2020 支持
+    "compilerOptions": {
+        "target": "ES2020",
+        "module": "ES2020",
+        "lib": [
+            "ES2020"
+        ],
+        "forceConsistentCasingInFileNames": true, // 强制文件名大小写一致
+        "checkJs": true, // 检查js文件
+        "allowJs": true, // 允许编译js文件
+        "noEmit": true, // 不生成文件
+        "strict": true, // 严格模式
+        "strictNullChecks": true, // 严格空值检查
+        "baseUrl": ".",
+        "paths": {
+            "levilamina": [
+                "types/levilamina.d.ts"
+            ],
+            "minecraft": [
+                "types/minecraft.d.ts"
+            ],
+            "plotx": [
+                "types/plotx.d.ts"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.js",
+        "types/helper.d.ts"
+    ]
+}

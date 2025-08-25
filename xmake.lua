@@ -7,7 +7,7 @@ add_requires("levilamina 1.4.1", {configs = {target_type = "server"}})
 add_requires("levibuildscript")
 
 -- engsr6982
-add_requires("qjspp aaf71142ff5372c0e10f88d2e460583245efbe6d");
+add_requires("qjspp fb432a47f42e2d8b4779c0fcaa02404d7f6af313");
 
 if not has_config("vs_runtime") then
     set_runtimes("MD")
@@ -38,11 +38,19 @@ target("PlotX") -- Change this to your mod name.
     )
     add_includedirs("src", "patches")
     add_packages("levilamina", "qjspp")
+    add_defines("QJSPP_INT64_OR_UINT64_ALWAYS_USE_NUMBER_OF_BIGINT_IN_TYPE_CONVERTER")
 
     if has_config("overworld") then
         add_defines("PLOTX_OVERWORLD")
     end
 
-    if is_mode("debug") then
-        add_defines("PLOTX_DEBUG")
-    end
+    after_build(function (target) 
+        local project_dir =  os.projectdir()
+        local bin_dir = path.join(project_dir, "bin")
+
+        local script_src = path.join(project_dir, "scripting", "src")
+        local script_bin = path.join(bin_dir, target:name(), "scripting")
+
+        os.mkdir(script_bin)
+        os.cp(script_src.."/*", script_bin)
+    end)
