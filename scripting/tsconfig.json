@@ -15,13 +15,13 @@
         "baseUrl": ".",
         "paths": {
             "levilamina": [
-                "types/levilamina.d.ts"
+                "types/levilamina/index.d.ts"
             ],
             "minecraft": [
-                "types/minecraft.d.ts"
+                "types/minecraft/index.d.ts"
             ],
             "plotx": [
-                "types/plotx.d.ts"
+                "types/plotx/index.d.ts"
             ]
         }
     },
