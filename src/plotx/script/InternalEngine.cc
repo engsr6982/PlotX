@@ -12,16 +12,12 @@
 #include "qjspp/JsException.hpp"
 #include "qjspp/JsScope.hpp"
 
-#include "api/PlotXDef.hpp"
-
 namespace plotx::script {
 
 
 InternalEngine::InternalEngine(PlotX& plotx) {
     engine_ = new qjspp::JsEngine();
     qjspp::JsScope lock{engine_};
-
-    engine_->registerNativeClass(LoggerDef_);
 
     engine_->registerNativeModule(GetMinecraftModuleDef());
     engine_->registerNativeModule(GetLeviLaminaModuleDef());

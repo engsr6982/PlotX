@@ -1,75 +1,18 @@
-#include "LeviLaminaDef.hpp"
-#include "ll/api/event/Cancellable.h"
 #include "ll/api/event/Event.h"
+#include "ll/api/event/Cancellable.h"
 #include "ll/api/event/EventBus.h"
 #include "ll/api/event/EventId.h"
 #include "ll/api/event/ListenerBase.h"
 #include "ll/api/event/player/PlayerJoinEvent.h"
-#include "ll/api/form/CustomForm.h"
-#include "ll/api/form/ModalForm.h"
-#include "ll/api/form/SimpleForm.h"
 #include "plotx/PlotX.hpp"
+#include "plotx/script/api/Helper.hpp"
+#include "plotx/script/api/levilamina/defs.hpp"
 #include "qjspp/JsScope.hpp"
-#include <string>
-#include <string_view>
-
-
-#include "Helper.hpp"
 #include "qjspp/Values.hpp"
+#include <string>
 
 
-namespace plotx::script {
-
-using namespace ll::form;
-
-qjspp::ClassDefine const SimpleFormDef_ =
-    qjspp::defineClass<SimpleForm>("SimpleForm")
-        .constructor<>()
-        .instanceMethod("setTitle", &SimpleForm::setTitle)
-        .instanceMethod("setContent", &SimpleForm::setContent)
-        .instanceMethod("appendHeader", &SimpleForm::appendHeader)
-        .instanceMethod("appendLabel", &SimpleForm::appendLabel)
-        .instanceMethod("appendDivider", &SimpleForm::appendDivider)
-        .instanceMethod(
-            "appendButton",
-            static_cast<SimpleForm& (SimpleForm::*)(std::string const&,
-                                                    std::string const&,
-                                                    std::string const&,
-                                                    SimpleForm::ButtonCallback)>(&SimpleForm::appendButton),
-            static_cast<SimpleForm& (SimpleForm::*)(std::string const&, SimpleForm::ButtonCallback)>(
-                &SimpleForm::appendButton
-            )
-        )
-        .instanceMethod("sendTo", &SimpleForm::sendTo)
-        .instanceMethod("sendUpdate", &SimpleForm::sendUpdate)
-        .build();
-
-qjspp::ClassDefine const CustomFormDef_ = qjspp::defineClass<CustomForm>("CustomForm")
-                                              .constructor<>()
-                                              .instanceMethod("setTitle", &CustomForm::setTitle)
-                                              .instanceMethod("setSubmitButton", &CustomForm::setSubmitButton)
-                                              .instanceMethod("appendHeader", &CustomForm::appendHeader)
-                                              .instanceMethod("appendLabel", &CustomForm::appendLabel)
-                                              .instanceMethod("appendDivider", &CustomForm::appendDivider)
-                                              .instanceMethod("appendInput", &CustomForm::appendInput)
-                                              .instanceMethod("appendToggle", &CustomForm::appendToggle)
-                                              .instanceMethod("appendDropdown", &CustomForm::appendDropdown)
-                                              .instanceMethod("appendSlider", &CustomForm::appendSlider)
-                                              .instanceMethod("appendStepSlider", &CustomForm::appendStepSlider)
-                                              .instanceMethod("sendTo", &CustomForm::sendTo)
-                                              .instanceMethod("sendUpdate", &CustomForm::sendUpdate)
-                                              .instanceMethod("getFormData", &CustomForm::getFormData)
-                                              .build();
-
-qjspp::ClassDefine const ModalFormDef_ = qjspp::defineClass<ModalForm>("ModalForm")
-                                             .constructor<>()
-                                             .instanceMethod("setTitle", &ModalForm::setTitle)
-                                             .instanceMethod("setContent", &ModalForm::setContent)
-                                             .instanceMethod("setUpperButton", &ModalForm::setUpperButton)
-                                             .instanceMethod("setLowerButton", &ModalForm::setLowerButton)
-                                             .instanceMethod("sendTo", &ModalForm::sendTo)
-                                             .instanceMethod("sendUpdate", &ModalForm::sendUpdate)
-                                             .build();
+namespace plotx::script::api::inline levilamina {
 
 
 qjspp::ClassDefine const EventDef_ =
@@ -168,4 +111,4 @@ qjspp::ClassDefine const EventBusDef_ =
         .build();
 
 
-} // namespace plotx::script
+} // namespace plotx::script::api::inline levilamina

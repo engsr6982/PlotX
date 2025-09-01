@@ -1,10 +1,11 @@
-#include "PlotXDef.hpp"
 #include "ll/api/io/Logger.h"
 #include "plotx/PlotX.hpp"
+#include "plotx/script/api/plotx/defs.hpp"
+#include "qjspp/Binding.hpp"
 #include "qjspp/Values.hpp"
 
 
-namespace plotx::script {
+namespace plotx::script::api::inline plotx {
 
 
 std::string formatArgs(qjspp::Arguments const& args) {
@@ -63,4 +64,4 @@ qjspp::ClassDefine const LoggerDef_ =
         .build();
 
 
-} // namespace plotx::script
+} // namespace plotx::script::api::inline plotx

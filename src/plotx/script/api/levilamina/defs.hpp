@@ -2,8 +2,9 @@
 #include "qjspp/Binding.hpp"
 
 
-namespace plotx::script {
+namespace plotx::script::api::inline levilamina {
 
+// === Form API ===
 extern qjspp::ClassDefine const SimpleFormDef_;
 
 extern qjspp::ClassDefine const CustomFormDef_;
@@ -11,6 +12,7 @@ extern qjspp::ClassDefine const CustomFormDef_;
 extern qjspp::ClassDefine const ModalFormDef_;
 
 
+// === Event API ===
 extern qjspp::ClassDefine const EventBusDef_;
 
 extern qjspp::ClassDefine const EventDef_;
@@ -20,4 +22,4 @@ extern qjspp::ClassDefine const CancellableEventDef_;
 extern qjspp::ClassDefine const PlayerJoinEventDef_;
 
 
-} // namespace plotx::script
+} // namespace plotx::script::api::inline levilamina

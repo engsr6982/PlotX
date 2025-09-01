@@ -5,16 +5,19 @@
 #include "mc/platform/UUID.h"
 #include "mc/server/ServerPlayer.h"
 #include "mc/world/actor/player/Player.h"
-#include "plotx/script/api/MinecraftDef.hpp"
 #include "qjspp/Binding.hpp"
 #include "qjspp/JsEngine.hpp"
 #include "qjspp/JsScope.hpp"
 #include "qjspp/Values.hpp"
 #include <memory>
-#include <optional>
-
 
 #include "qjspp/TypeConverter.hpp"
+
+// forward declarations
+namespace plotx::script::api::inline minecraft {
+extern qjspp::ClassDefine const PlayerDef_;
+extern qjspp::ClassDefine const UUIDDef_;
+} // namespace plotx::script::api::inline minecraft
 
 namespace plotx::script {
 
@@ -42,13 +45,14 @@ inline qjspp::Object newInstanceOfGameWeak(qjspp::ClassDefine const& def, Player
 
 } // namespace plotx::script
 
+
 namespace qjspp {
 
 
 template <>
 struct TypeConverter<Player> {
     static Value toJs(Player* player) {
-        return plotx::script::newInstanceOfGameWeak(plotx::script::PlayerDef_, player);
+        return plotx::script::newInstanceOfGameWeak(plotx::script::api::PlayerDef_, player);
     }
     static Value toJs(Player& player) { return toJs(&player); }
 
@@ -56,7 +60,10 @@ struct TypeConverter<Player> {
         if (!value.isObject()) {
             return nullptr;
         }
-        return JsScope::currentEngineChecked().getNativeInstanceOf<Player>(value.asObject(), plotx::script::PlayerDef_);
+        return JsScope::currentEngineChecked().getNativeInstanceOf<Player>(
+            value.asObject(),
+            plotx::script::api::PlayerDef_
+        );
     }
 };
 static_assert(internal::IsTypeConverterAvailable_v<Player>);
@@ -70,7 +77,7 @@ template <>
 struct TypeConverter<mce::UUID> {
     static Value toJs(mce::UUID uuid) { // 值传递，创建一个副本
         auto unique = std::make_unique<mce::UUID>(uuid);
-        return JsScope::currentEngineChecked().newInstanceOfUnique(plotx::script::UUIDDef_, std::move(unique));
+        return JsScope::currentEngineChecked().newInstanceOfUnique(plotx::script::api::UUIDDef_, std::move(unique));
     }
 
     static mce::UUID* toCpp(Value const& value) {
@@ -79,7 +86,7 @@ struct TypeConverter<mce::UUID> {
         }
         return JsScope::currentEngineChecked().getNativeInstanceOf<mce::UUID>(
             value.asObject(),
-            plotx::script::UUIDDef_
+            plotx::script::api::UUIDDef_
         );
     }
 };

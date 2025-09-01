@@ -1,17 +1,8 @@
-#include "MinecraftDef.hpp"
-#include "ll/api/service/Bedrock.h"
-#include "mc/platform/UUID.h"
-#include "mc/world/actor/player/Player.h"
-#include "mc/world/level/Level.h"
 #include "plotx/script/api/Helper.hpp"
-#include "qjspp/Binding.hpp"
-#include <string>
+#include "plotx/script/api/minecraft/defs.hpp"
 
 
-#include "Helper.hpp"
-
-namespace plotx::script {
-
+namespace plotx::script::api::inline minecraft {
 
 qjspp::ClassDefine const PlayerDef_ =
     qjspp::defineClass<Player>("Player")
@@ -35,13 +26,4 @@ qjspp::ClassDefine const PlayerDef_ =
         .instanceMethod("getLocaleCode", &Player::getLocaleCode)
         .build();
 
-
-qjspp::ClassDefine const UUIDDef_ = qjspp::defineClass<mce::UUID>("UUID")
-                                        .constructor<std::string const&>()
-                                        .instanceMethod("asString", &mce::UUID::asString)
-                                        .function("canParse", &mce::UUID::canParse)
-                                        .function("fromString", &mce::UUID::fromString)
-                                        .build();
-
-
-} // namespace plotx::script
+} // namespace plotx::script::api::inline minecraft
