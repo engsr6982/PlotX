@@ -1,5 +1,10 @@
-import { CustomForm, EventBus } from "levilamina";
-import { Player } from "minecraft";
+import {
+    CustomForm,
+    EventBus,
+    EventPriority,
+    ModalFormSelectedButton,
+} from "levilamina";
+import { ModalFormCancelReason, Player } from "minecraft";
 import { logger } from "plotx";
 
 /**
@@ -58,3 +63,11 @@ const id = EventBus.emplaceListener("PlayerJoinEvent", (ev) => {
 });
 
 logger.info("Script loaded!");
+
+logger.warn("Enum Bind test: ");
+logger.warn("EventPriority: ", JSON.stringify(EventPriority));
+logger.warn("ModalFormCancelReason: ", JSON.stringify(ModalFormCancelReason));
+logger.warn(
+    "ModalFormSelectedButton: ",
+    JSON.stringify(ModalFormSelectedButton)
+);

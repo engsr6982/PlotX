@@ -1,6 +1,8 @@
 #include "ll/api/form/ModalForm.h"
 #include "plotx/script/api/Helper.hpp"
 #include "plotx/script/api/levilamina/defs.hpp"
+#include "qjspp/Binding.hpp"
+#include "qjspp/Definitions.hpp"
 
 
 namespace plotx::script::api::inline levilamina {
@@ -16,5 +18,11 @@ qjspp::ClassDefine const ModalFormDef_ = qjspp::defineClass<ModalForm>("ModalFor
                                              .instanceMethod("sendTo", &ModalForm::sendTo)
                                              .instanceMethod("sendUpdate", &ModalForm::sendUpdate)
                                              .build();
+
+qjspp::EnumDefine const ModalFormSelectedButtonDef_ =
+    qjspp::defineEnum<ModalFormSelectedButton>("ModalFormSelectedButton")
+        .value("Upper", ModalFormSelectedButton::Upper)
+        .value("Lower", ModalFormSelectedButton::Lower)
+        .build();
 
 } // namespace plotx::script::api::inline levilamina

@@ -17,6 +17,17 @@ declare type unordered_map<K extends string, V> = {
 
 /**
  * C++ std::variant
- * @usage type MyType = variant<[number, string]>;
+ * @example type MyType = variant<[number, string]>;
  */
 declare type variant<Args extends readonly unknown[]> = Args[number];
+
+/**
+ * C++ enum (qjspp)
+ * @example
+ * export type EventPriority = enum_class<["Highest", "High", "Normal", "Low", "Lowest"]>;
+ */
+declare type enum_class<Keys extends readonly string[]> = {
+    readonly $name: string; // qjapp generated
+} & {
+    readonly [K in Keys[number]]: number;
+};

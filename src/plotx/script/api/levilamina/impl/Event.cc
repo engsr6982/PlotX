@@ -7,6 +7,7 @@
 #include "plotx/PlotX.hpp"
 #include "plotx/script/api/Helper.hpp"
 #include "plotx/script/api/levilamina/defs.hpp"
+#include "qjspp/Definitions.hpp"
 #include "qjspp/JsScope.hpp"
 #include "qjspp/Values.hpp"
 #include <string>
@@ -14,6 +15,14 @@
 
 namespace plotx::script::api::inline levilamina {
 
+
+qjspp::EnumDefine const EventPriorityDef_ = qjspp::defineEnum<ll::event::EventPriority>("EventPriority")
+                                                .value("Highest", ll::event::EventPriority::Highest)
+                                                .value("High", ll::event::EventPriority::High)
+                                                .value("Normal", ll::event::EventPriority::Normal)
+                                                .value("Low", ll::event::EventPriority::Low)
+                                                .value("Lowest", ll::event::EventPriority::Lowest)
+                                                .build();
 
 qjspp::ClassDefine const EventDef_ =
     qjspp::defineClass<ll::event::Event>("Event")

@@ -10,6 +10,7 @@ extern qjspp::ClassDefine const SimpleFormDef_;
 extern qjspp::ClassDefine const CustomFormDef_;
 
 extern qjspp::ClassDefine const ModalFormDef_;
+extern qjspp::EnumDefine const  ModalFormSelectedButtonDef_;
 
 
 // === Event API ===
@@ -20,6 +21,8 @@ extern qjspp::ClassDefine const EventDef_;
 extern qjspp::ClassDefine const CancellableEventDef_;
 
 extern qjspp::ClassDefine const PlayerJoinEventDef_;
+
+extern qjspp::EnumDefine const EventPriorityDef_;
 
 
 } // namespace plotx::script::api::inline levilamina

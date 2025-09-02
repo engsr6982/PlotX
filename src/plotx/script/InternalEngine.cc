@@ -41,7 +41,8 @@ InternalEngine::InternalEngine(PlotX& plotx) {
     try {
         engine_->loadScript(path, true);
     } catch (qjspp::JsException const& e) {
-        throw std::runtime_error(fmt::format("[Scripting] Failed to load script! {}\n{}", e.what(), e.stacktrace()));
+        plotx.getSelf().getLogger().error("[Scripting] Failed to load script! {}\n{}", e.what(), e.stacktrace());
+        throw;
     }
 
     quit_   = std::make_shared<std::atomic<bool>>(false);

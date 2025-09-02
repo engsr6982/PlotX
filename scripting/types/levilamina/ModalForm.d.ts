@@ -1,10 +1,8 @@
 import { Player } from "minecraft";
 
 declare module "levilamina" {
-    export enum ModalFormSelectedButton {
-        Upper = 1, // true
-        Lower = 0, // false
-    }
+    export type ModalFormSelectedButton = enum_class<["Upper", "Lower"]>; // Upper: true, Lower: false
+    export const ModalFormSelectedButton: ModalFormSelectedButton; // fix ts 18042
     export type ModalFormResult = optional<ModalFormSelectedButton>;
     export type ModalFormCallback = (
         player: Player,

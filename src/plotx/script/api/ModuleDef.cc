@@ -16,17 +16,23 @@ qjspp::ModuleDefine const& GetLeviLaminaModuleDef() {
                           .exportClass(SimpleFormDef_)
                           .exportClass(CustomFormDef_)
                           .exportClass(ModalFormDef_)
+                          .exportEnum(ModalFormSelectedButtonDef_)
                           .exportClass(EventBusDef_)
                           .exportClass(EventDef_)
                           .exportClass(CancellableEventDef_)
                           .exportClass(PlayerJoinEventDef_)
+                          .exportEnum(EventPriorityDef_)
                           .build();
     return def;
 }
 
 qjspp::ModuleDefine const& GetMinecraftModuleDef() {
     using namespace api::minecraft;
-    static auto def = qjspp::defineModule("minecraft").exportClass(PlayerDef_).exportClass(UUIDDef_).build();
+    static auto def = qjspp::defineModule("minecraft")
+                          .exportClass(PlayerDef_)
+                          .exportClass(UUIDDef_)
+                          .exportEnum(ModalFormCancelReasonDef_)
+                          .build();
     return def;
 }
 

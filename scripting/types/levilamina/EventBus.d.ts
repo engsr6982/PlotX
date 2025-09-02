@@ -14,11 +14,16 @@ declare module "levilamina" {
 
     export type EventListenerId = number;
 
+    export type EventPriority = enum_class<
+        ["Highest", "High", "Normal", "Low", "Lowest"]
+    >;
+    export const EventPriority: EventPriority; // fix ts 18042
+
     export class EventBus {
         static emplaceListener<N extends _EventNames_, E extends _EventMap_[N]>(
             eventName: N,
             listener: EventListener<N, E>,
-            priority?: number // default: 0
+            priority?: EventPriority
         ): EventListenerId;
 
         static removeListener(listenerId: EventListenerId): boolean;
