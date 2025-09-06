@@ -22,6 +22,7 @@ qjspp::ModuleDefine const& GetLeviLaminaModuleDef() {
                           .exportClass(CancellableEventDef_)
                           .exportClass(PlayerJoinEventDef_)
                           .exportEnum(EventPriorityDef_)
+                          .exportClass(KeyValueDBDef_)
                           .build();
     return def;
 }

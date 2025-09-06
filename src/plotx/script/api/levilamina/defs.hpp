@@ -1,5 +1,6 @@
 #pragma once
 #include "qjspp/Binding.hpp"
+#include "qjspp/Definitions.hpp"
 
 
 namespace plotx::script::api::inline levilamina {
@@ -23,6 +24,10 @@ extern qjspp::ClassDefine const CancellableEventDef_;
 extern qjspp::ClassDefine const PlayerJoinEventDef_;
 
 extern qjspp::EnumDefine const EventPriorityDef_;
+
+
+// === Data API ===
+extern qjspp::ClassDefine const KeyValueDBDef_;
 
 
 } // namespace plotx::script::api::inline levilamina
