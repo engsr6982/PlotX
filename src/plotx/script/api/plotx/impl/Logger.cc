@@ -20,8 +20,8 @@ std::string formatArgs(qjspp::Arguments const& args) {
     oss << prefix;
     for (size_t i = 0; i < argc; ++i) {
         auto arg = args[i];
-        if (arg.isString()) oss << arg.toString().value();
-        else oss << args[i].toString();
+        if (arg.isString()) oss << arg.asString().value();
+        else oss << args[i].toString().value();
 
         if (i < argc - 1) {
             oss << " ";
