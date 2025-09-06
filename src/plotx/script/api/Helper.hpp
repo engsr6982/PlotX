@@ -5,6 +5,7 @@
 #include "mc/platform/UUID.h"
 #include "mc/server/ServerPlayer.h"
 #include "mc/world/actor/player/Player.h"
+#include "plotx/script/api/minecraft/defs.hpp"
 #include "qjspp/Binding.hpp"
 #include "qjspp/JsEngine.hpp"
 #include "qjspp/JsScope.hpp"
@@ -17,6 +18,8 @@
 namespace plotx::script::api::inline minecraft {
 extern qjspp::ClassDefine const PlayerDef_;
 extern qjspp::ClassDefine const UUIDDef_;
+extern qjspp::ClassDefine const BlockPosDef_;
+extern qjspp::ClassDefine const Vec3Def_;
 } // namespace plotx::script::api::inline minecraft
 
 namespace plotx::script {
@@ -92,5 +95,24 @@ struct TypeConverter<mce::UUID> {
 };
 static_assert(internal::IsTypeConverterAvailable_v<mce::UUID>);
 
+
+template <>
+struct TypeConverter<Vec3> {
+    static Value toJs(Vec3 vec) {
+        return JsScope::currentEngineChecked().newInstanceOfRaw(
+            plotx::script::api::Vec3Def_,
+            new Vec3(vec.x, vec.y, vec.z)
+        );
+    }
+    static Vec3* toCpp(Value const& value) {
+        if (!value.isObject()) {
+            return nullptr;
+        }
+        return JsScope::currentEngineChecked().getNativeInstanceOf<Vec3>(
+            value.asObject(),
+            plotx::script::api::Vec3Def_
+        );
+    }
+};
 
 } // namespace qjspp

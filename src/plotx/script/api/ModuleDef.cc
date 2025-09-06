@@ -11,35 +11,34 @@ namespace plotx::script {
 
 
 qjspp::ModuleDefine const& GetLeviLaminaModuleDef() {
-    using namespace api::levilamina;
     static auto def = qjspp::defineModule("levilamina")
-                          .exportClass(SimpleFormDef_)
-                          .exportClass(CustomFormDef_)
-                          .exportClass(ModalFormDef_)
-                          .exportEnum(ModalFormSelectedButtonDef_)
-                          .exportClass(EventBusDef_)
-                          .exportClass(EventDef_)
-                          .exportClass(CancellableEventDef_)
-                          .exportClass(PlayerJoinEventDef_)
-                          .exportEnum(EventPriorityDef_)
-                          .exportClass(KeyValueDBDef_)
+                          .exportClass(api::SimpleFormDef_)
+                          .exportClass(api::CustomFormDef_)
+                          .exportClass(api::ModalFormDef_)
+                          .exportEnum(api::ModalFormSelectedButtonDef_)
+                          .exportClass(api::EventBusDef_)
+                          .exportClass(api::EventDef_)
+                          .exportClass(api::CancellableEventDef_)
+                          .exportClass(api::PlayerJoinEventDef_)
+                          .exportEnum(api::EventPriorityDef_)
+                          .exportClass(api::KeyValueDBDef_)
                           .build();
     return def;
 }
 
 qjspp::ModuleDefine const& GetMinecraftModuleDef() {
-    using namespace api::minecraft;
     static auto def = qjspp::defineModule("minecraft")
-                          .exportClass(PlayerDef_)
-                          .exportClass(UUIDDef_)
-                          .exportEnum(ModalFormCancelReasonDef_)
+                          .exportClass(api::PlayerDef_)
+                          .exportClass(api::UUIDDef_)
+                          .exportEnum(api::ModalFormCancelReasonDef_)
+                          .exportClass(api::BlockPosDef_)
+                          .exportClass(api::Vec3Def_)
                           .build();
     return def;
 }
 
 qjspp::ModuleDefine const& GetPlotXModuleDef() {
-    using namespace api::plotx;
-    static auto def = qjspp::defineModule("plotx").exportClass(LoggerDef_).build();
+    static auto def = qjspp::defineModule("plotx").exportClass(api::LoggerDef_).build();
     return def;
 }
 
