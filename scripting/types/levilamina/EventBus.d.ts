@@ -7,16 +7,11 @@ declare module "levilamina" {
     }
     type _EventNames_ = keyof _EventMap_;
 
-    export type EventListener<
-        N extends _EventNames_,
-        E extends _EventMap_[N]
-    > = (event: E) => void;
+    export type EventListener<N extends _EventNames_, E extends _EventMap_[N]> = (event: E) => void;
 
     export type EventListenerId = number;
 
-    export type EventPriority = enum_class<
-        ["Highest", "High", "Normal", "Low", "Lowest"]
-    >;
+    export type EventPriority = NativeEnum<["Highest", "High", "Normal", "Low", "Lowest"]>;
     export const EventPriority: EventPriority; // fix ts 18042
 
     export class EventBus {

@@ -38,7 +38,7 @@ qjspp::ModuleDefine const& GetMinecraftModuleDef() {
 }
 
 qjspp::ModuleDefine const& GetPlotXModuleDef() {
-    static auto def = qjspp::defineModule("plotx").exportClass(api::LoggerDef_).build();
+    static auto def = qjspp::defineModule("plotx").exportClass(api::LoggerDef_).exportClass(api::PlotAABBDef_).build();
     return def;
 }
 

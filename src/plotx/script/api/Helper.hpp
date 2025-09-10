@@ -5,14 +5,14 @@
 #include "mc/platform/UUID.h"
 #include "mc/server/ServerPlayer.h"
 #include "mc/world/actor/player/Player.h"
-#include "plotx/script/api/minecraft/defs.hpp"
+
 #include "qjspp/Binding.hpp"
 #include "qjspp/JsEngine.hpp"
 #include "qjspp/JsScope.hpp"
-#include "qjspp/Values.hpp"
-#include <memory>
-
 #include "qjspp/TypeConverter.hpp"
+#include "qjspp/Values.hpp"
+
+#include <memory>
 
 // forward declarations
 namespace plotx::script::api::inline minecraft {
@@ -111,6 +111,26 @@ struct TypeConverter<Vec3> {
         return JsScope::currentEngineChecked().getNativeInstanceOf<Vec3>(
             value.asObject(),
             plotx::script::api::Vec3Def_
+        );
+    }
+};
+
+
+template <>
+struct TypeConverter<BlockPos> {
+    static Value toJs(BlockPos pos) {
+        return JsScope::currentEngineChecked().newInstanceOfRaw(
+            plotx::script::api::BlockPosDef_,
+            new BlockPos(pos.x, pos.y, pos.z)
+        );
+    }
+    static BlockPos* toCpp(Value const& value) {
+        if (!value.isObject()) {
+            return nullptr;
+        }
+        return JsScope::currentEngineChecked().getNativeInstanceOf<BlockPos>(
+            value.asObject(),
+            plotx::script::api::BlockPosDef_
         );
     }
 };

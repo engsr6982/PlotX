@@ -27,6 +27,6 @@
     },
     "include": [
         "src/**/*.js",
-        "types/helper.d.ts"
+        "types/qjspp.d.ts"
     ]
 }

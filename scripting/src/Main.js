@@ -1,6 +1,6 @@
 import { CustomForm, EventBus, EventPriority, KeyValueDB, ModalFormSelectedButton } from "levilamina";
-import { ModalFormCancelReason, Player } from "minecraft";
-import { logger } from "plotx";
+import { BlockPos, ModalFormCancelReason, Player } from "minecraft";
+import { logger, PlotAABB } from "plotx";
 
 /**
  * @param {Player} pl
@@ -75,3 +75,10 @@ try {
 } catch (e) {
     logger.error(e, "\n", e.stack);
 }
+
+let min = new BlockPos(0, 0, 0);
+let max = new BlockPos(1, 1, 1);
+let ab1 = new PlotAABB(min, max);
+let ab2 = new PlotAABB(min, max);
+
+logger.warn("AABB: ", ab1.$equals(ab2));

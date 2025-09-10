@@ -1,4 +1,4 @@
 declare module "minecraft" {
-    export type ModalFormCancelReason = enum_class<["UserClosed", "UserBusy"]>;
+    export type ModalFormCancelReason = NativeEnum<["UserClosed", "UserBusy"]>;
     export const ModalFormCancelReason: ModalFormCancelReason; // fix ts 18042
 }
