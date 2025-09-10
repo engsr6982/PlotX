@@ -18,8 +18,10 @@ public:
 
     PXNDAPI std::string toString() const;
 
-    PXNDAPI BlockPos getMin() const;
-    PXNDAPI BlockPos getMax() const;
+    PXNDAPI BlockPos&       getMin();
+    PXNDAPI BlockPos&       getMax();
+    PXNDAPI BlockPos const& getMin() const;
+    PXNDAPI BlockPos const& getMax() const;
 
     /**
      * 检查一个点是否在 AABB 的边上

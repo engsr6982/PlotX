@@ -17,8 +17,10 @@ PlotAABB::PlotAABB(BlockPos const& min, BlockPos const& max) : min(min), max(max
 
 std::string PlotAABB::toString() const { return fmt::format("PlotAABB({}, {})", min.toString(), max.toString()); }
 
-BlockPos PlotAABB::getMin() const { return min; }
-BlockPos PlotAABB::getMax() const { return max; }
+BlockPos&       PlotAABB::getMin() { return min; }
+BlockPos&       PlotAABB::getMax() { return max; }
+BlockPos const& PlotAABB::getMin() const { return min; }
+BlockPos const& PlotAABB::getMax() const { return max; }
 
 bool PlotAABB::isOnEdge(BlockPos const& pos) const {
     bool onXEdge = pos.x == min.x || pos.x == max.x;
